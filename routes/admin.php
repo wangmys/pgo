@@ -40,6 +40,9 @@ function () {
 
 	Route::any('profile', 'LoginController@profile'); // 修改头像
 	Route::any('doprofile', 'LoginController@doprofile'); 
+	Route::any('pass', 'LoginController@pass'); // 修改密码
+	Route::any('dopass', 'LoginController@dopass'); // 
+	Route::any('logout', 'LoginController@logout'); // 退出登录
 });
 
 

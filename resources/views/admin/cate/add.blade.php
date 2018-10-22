@@ -26,6 +26,9 @@
                                 <option value="0">顶级分类</option>
                                 @foreach ($cate as $k=>$v)
                                     <option value="{{$v->id}}">{{$v->cate_name}}</option>
+                                    @foreach ($cate as $k=>$v)
+                                    <option value="{{$v->id}}" @if($v->id==$id) selected="selected" @endif>{{$v->cate_name}}</option>
+                                    @endforeach
                                 @endforeach
                             </select>
                         </div>

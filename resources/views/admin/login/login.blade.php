@@ -65,7 +65,7 @@ Purchase: http://wrapbootstrap.com
                 <input type="text"  name="name" class="form-control" placeholder="请填写账号" />
             </div>
             <div class="loginbox-textbox">
-                <input type="password" class="form-control" name="pwd"  value="" placeholder="请填写密码" />
+            <input type="password" class="form-control" name="pwd"  value="" placeholder="请填写密码" />
             </div>
             <div class="loginbox-textbox">
             	<img src="/admin/cap" onclick='this.src = this.src +="?1"' style="float:right;">

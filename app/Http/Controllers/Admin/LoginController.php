@@ -28,32 +28,26 @@ class LoginController extends Controller
     {
     	//表单验证
     	$res=$request->except('_token');
-
     	//验证验证码
     	$code = session('code');
-    	/*dump($code);*/
+
 
     	if($code != $request->code)
     	{
     		return back()->with('error','&nbsp;验证码错误，请重新输入！');
     	}
-
-
     	//验证用户名
-    	$name=DB::table('admin')->where('name',$request->name)->where('pwd',md5($request->pwd))->first();
+    	$name=DB::table('admin')->where('name',$request->name)->first();
     	if(!$name){
     		return back()->with('error',' &nbsp;用户名或密码错误，请重新输入！');
     	}
-        // dd($name);
-
     	//验证密码md
-    	// $pwd=DB::table('admin')->first();
-    	// dd($pwd);
-    	// if(!$pwd)
-    	// {
-    	// 	return back()->with('error','&nbsp;用户名或密码错误，请重新输入！');
-    	// }
-
+    	$pwd=DB::table('admin')->where('pwd',md5($request->pwd))->first();
+    	
+    	if(!$pwd)
+    	{
+    		return back()->with('error','&nbsp;用户名或密码错误，请重新输入！');
+    	}
 
     	//存储用户idsession(['id'=>$name->id]);
     	session(['id'=>$name->id]);
@@ -105,7 +99,7 @@ class LoginController extends Controller
     	//获取上传的文件对象  $_FILES
         $file = $request->file('img');
         //判断文件是否有效
-        if($file->isValid()){
+        if($file){
 
         	$res['img']=(new AdminModel)->upload($file,'img',ADMIN_IMG);
         	// return $res;
@@ -114,8 +108,50 @@ class LoginController extends Controller
             return  ADMIN_IMG.'/'.$res['img'];
         }
 
-        return redirect('/admin/index')->with('sunccess','头像修改成功！');
+       /* return redirect('/admin/index')->with('success','头像修改成功！');*/
+    }
+
+    public function pass()
+    {
+        return view('admin.login.pass',['title'=>'修改密码']);
+    }
+
+    public function dopass(Request $request)
+    {
+        //表单验证
+
+        //获取数据库密码
+        $pwd=DB::table('admin')->where('id',session('id'))->first()->pwd;
+        //获取旧密码
+        $oldpass = $request->oldpass;
+        if($pwd != md5($oldpass))
+        {
+            return back()->with('error','原密码错误！');
+        }
+
+        $data['pwd'] = md5($request->pwd);
+       
+        try{
+           
+             $data = AdminModel::where('id',session('id'))->update($data);
+        
+            if($data){
+
+                return redirect('/admin/login')->with('success','修改成功');
+            }
+        }catch(\Exception $e){
+
+            return back()->with('error','修改密码失败');
+        }
+
     }
 
 
+    public function logout()
+    {
+        //清空session uid
+        session(['id'=>'']);
+
+        return redirect('/admin/login');
+    } 
 }

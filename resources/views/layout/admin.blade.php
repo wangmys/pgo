@@ -26,7 +26,9 @@ Purchase: http://wrapbootstrap.com
 
     <!--Fonts-->
     <!--     <link href="http://fonts.useso.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,400,600,700,300" rel="stylesheet" type="text/css"> -->
+    @section('css')
 
+    @show
     <!--Beyond styles-->
     <link id="beyond-link" href="{{ asset(_ADMIN_ . '/css/beyond.min.css') }}" rel="stylesheet" type="text/css" />
     <link href="{{ asset(_ADMIN_ . '/css/demo.min.css') }}" rel="stylesheet" />
@@ -95,37 +97,49 @@ Purchase: http://wrapbootstrap.com
                 <i class="collapse-icon fa fa-bars"></i>
             </div>
             <!-- /Sidebar Collapse -->
-            <!-- Account Area and Settings --->
+             <!-- Account Area and Settings --->
+
             <div class="navbar-header pull-right">
                 <div class="navbar-account">
                     <ul class="account-area">
+                        @php
+
+                           $rs =DB::table('admin')->where('id',session('id'))->first();
+
+                            @endphp
 
 
                         <li>
+
                             <a class="login-area dropdown-toggle" data-toggle="dropdown">
                                 <div class="avatar" title="View your public profile">
-                                    <img src="{{ asset(_ADMIN_) }}/img/avatars/adam-jansen.jpg">
+                                    
+                                    <img src="{{ADMIN_IMG.'/'.$rs->img}}" >
+
+        
                                 </div>
                                 <section>
-                                    <h2><span class="profile"><span>admin</span></span></h2>
+                                    <h2><span class="profile"><span>{{$rs->name}}</span></span></h2>
                                 </section>
                             </a>
                             <!--Login Area Dropdown-->
+
+                            
                             <ul class="pull-right dropdown-menu dropdown-arrow dropdown-login-area">
                                 <li class="username"><a>David Stevenson</a></li>
                                 <li class="edit" style="text-align:center">
-                                    <a href="/admin/profile" class="pull-center">修改头像</a>
+                                    <a href="/admin/profile" class="pull-center">►修改头像</a>
                                 </li>
                                 <li class="edit" style="text-align:center">
-                                    <a href="/admin/profile" class="pull-center">修改密码</a>
+                                    <a href="/admin/pass" class="pull-center">►修改密码</a>
                                 </li>
                                 
                                 
                                 <!--Avatar Area-->
                                 
                                 <!--Avatar Area-->
-                                <li class="edit">
-                                    <a href="profile.html" class="pull-left">▼选择后台背景色</a>
+                                <li class="edit" style="text-align:center">
+                                    <a class="pull-center" >▼选择背景色</a>
                                     
                                 </li>
                                 <!--Theme Selector Area-->
@@ -146,10 +160,14 @@ Purchase: http://wrapbootstrap.com
                                     </ul>
                                 </li>
                                 <!--/Theme Selector Area-->
-                                <li class="dropdown-footer">
-                                    <a href="login.html">
+                                <!-- <li class="dropdown-footer">
+                                    <a href="/admin/logout">
                                         退出登录
                                     </a>
+                                </li> -->
+
+                                <li class="edit" style="text-align:center">
+                                    <a href="/admin/logout" class="pull-center">►退出登录</a>
                                 </li>
                             </ul>
                             <!--/Login Area Dropdown-->
@@ -158,16 +176,9 @@ Purchase: http://wrapbootstrap.com
                         <!--Note: notice that setting div must start right after account area list.
                         no space must be between these elements-->
                         <!-- Settings -->
-                    </ul><div class="setting">
-                        <a id="btn-setting" title="Setting" href="#">
-                            <i class="icon glyphicon glyphicon-cog"></i>
-                        </a>
-                    </div><div class="setting-container">
-
-                        <label>
-                            <input type="checkbox" id="checkbox_fixedbreadcrumbs">
-                            <span class="text">在线</span>
-                        </label>
+                    </ul>
+                    <div class=""><font size="2px" color="white">点击头像<br>修改信息</font></div>
+                    <div class="setting-container">
 
                     </div>
                     <!-- Settings -->
@@ -195,7 +206,7 @@ Purchase: http://wrapbootstrap.com
             <ul class="nav sidebar-menu">
 
                 <li>
-                    <a href="{{ url('admin/index') }}">
+                    <a href="{{ url('admin/index/') }}">
                         <i class="menu-icon glyphicon glyphicon-home"></i>
                         <span class="menu-text"> 后台首页 </span>
                     </a>

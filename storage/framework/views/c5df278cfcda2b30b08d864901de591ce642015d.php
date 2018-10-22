@@ -8,9 +8,17 @@
             <a id="editabledatatable_new" href="<?php echo e(url('admin/goods_cate/create')); ?>" class="btn btn-blue">
                <span class="glyphicon glyphicon-plus"></span>Add
             </a>
+            <form action="/admin/goods_cate" style="float: right;" method="get" id="form1">
+                <select id="cateChange" onchange="chengCate()" name="cate">
+                    <option value="">顶级分类</option>
+                    <?php $__currentLoopData = $cates; $__env->addLoop($__currentLoopData); foreach($__currentLoopData as $v): $__env->incrementLoopIndices(); $loop = $__env->getLastLoop(); ?>
+                        <option value="<?php echo e($v->id); ?>"><?php echo e($v->cate_name); ?></option>
+                    <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
+                </select>
+            </form>
         	<form action="/admin/goods_cate" style="float: right;" method="get">
             	<span class="input-icon inverted">
-	                <input type="text" class="form-control input-sm" name="keyword" value="">
+	                <input type="text" class="form-control input-sm" name="keyword" value="<?php echo e($req->keyword); ?>" placeholder="分类名称查询">
 	                <i class="glyphicon glyphicon-search bg-blue"></i>
 	                <button href="#" class="btn btn-default blue">搜索</button>
 	            </span>
@@ -93,6 +101,11 @@
                             </i>
                             删除
                         </button>
+                        <a href="/admin/goods_cate/create?id=<?php echo e($v->id); ?>" class="btn btn-info btn-xs edit">
+                            <i class="fa fa-edit">
+                            </i>
+                            添加子分类
+                        </a>
                     </td>
                 </tr>
                 <?php endforeach; $__env->popLoop(); $loop = $__env->getLastLoop(); ?>
@@ -145,6 +158,13 @@
 	})
 	  layer.close(index);
 	});
+}
+function chengCate()
+{   
+    var cate=$('select[name=cates]').val();
+    var form1=$('#form1');
+    form1.action = "/admin/goods_cate";
+    form1.submit();
 }
 </script>
 <?php $__env->stopSection(); ?>

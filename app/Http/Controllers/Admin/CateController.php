@@ -20,18 +20,26 @@ class CateController extends CommonController
         //
         // $data=CateModel::raw('*,concat(path,id) as paths')->paginate(2);
         //获取搜索关键字
-        $keyword=$req->input('keyword');
+        
 
         //连接id和path并排序以及分页
         $data = CateModel::select(DB::raw("*,concat(path,id) as paths"))->
-            orderBy('paths')->where('cate_name','like','%'.$keyword.'%')->paginate(10);
-
+            orderBy('paths')->where(function($query) use($req) {
+                   $keyword=$req->input('keyword');
+                   $query->where('cate_name','like','%'.$keyword.'%');
+                    $cate=$req->input('cate');
+                    $cates = CateModel::where('pid',0)->get();
+                     if(!empty($cate)){
+                        $query->where('path','like','%'.$cate.'%')->orWhere('id',$cate);
+                     }
+            })->paginate(10);
+        $cates = CateModel::where('pid',0)->get();    
         foreach($data as $k=>$v) {
             $n = substr_count($v->paths,',')-1;
             $v->cate_name = str_repeat('&nbsp;', $n*8).'|--'.$v->cate_name;
         }
 
-        return view('admin.cate.index',['title'=>'浏览类别','data'=>$data]);
+        return view('admin.cate.index',['title'=>'浏览类别','data'=>$data,'req'=>$req,'cates'=>$cates]);
     }
 
     /**
@@ -39,7 +47,7 @@ class CateController extends CommonController
      *
      * @return \Illuminate\Http\Response
      */
-    public function create()
+    public function create(Request $req)
     {
         //查出父类名称和id
         $cate = CateModel::select(DB::raw("id,cate_name,concat(path,id) as paths"))->
@@ -49,7 +57,7 @@ class CateController extends CommonController
             $v->cate_name = str_repeat('&nbsp;', $n*8).'|--'.$v->cate_name;
         }
 
-        return view('admin.cate.add',['title'=>'添加类别','cate'=>$cate]);
+        return view('admin.cate.add',['title'=>'添加类别','cate'=>$cate,'id'=>$req->input('id')]);
     }
 
     /**

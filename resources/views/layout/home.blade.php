@@ -136,6 +136,7 @@ var TOP_BANNER_DATA = {
         float: left;
           height: 24px;
           margin-left: 25px;
+          margin-bottom: 25px;
           padding: 0 10px;
           color: #FFF;
           line-height: 24px;

@@ -18,14 +18,15 @@
                         <div class="form-group">
                             <label class="col-sm-2 control-label no-padding-right">用户头像</label>
                             <div class="col-sm-6">
-                            	<img src="{{ADMIN_IMG.'/'.$rs->img}}" id="imgss">
+                            	<img src="{{ADMIN_IMG.'/'.$rs->img}}" id="imgss" width="250px" height="150px">
+                               
+                                
                                 <input name="img" type="file" id="file_upload">
+                                
                             </div>
                         </div>
 							<div class="form-group">
-                            <div class="col-sm-offset-2 col-sm-10">
-                                <button type="submit" class="btn btn-default">保存信息</button>
-                            </div>
+                            
                         </div>
                     </form>
                 </div>
@@ -42,7 +43,7 @@
 
 	$.ajaxSetup({
 	    headers: {
-	        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+	        'X-CSRF-TOKEN': $('meta[name="_token"]').attr('content')
 	    }
 	});
 
@@ -63,13 +64,14 @@ function uploadImage() {
 
     //判断上传文件的后缀名
     var strExtension = imgPath.substr(imgPath.lastIndexOf('.') + 1);
-    if (strExtension != 'jpg' && strExtension != 'gif'
+    if (strExtension != 'jpg' && strExtension != 'jpeg' && strExtension != 'gif'
         && strExtension != 'png' && strExtension != 'bmp') {
         alert("选择图片文件类型错误");
         return;
     }
 
     var formData = new FormData($('#art_form')[0]);
+
 
     $.ajax({
         type: "POST",
@@ -84,10 +86,10 @@ function uploadImage() {
 
             $('#imgss').attr('src',data);
 			// alert($('#imgs').attr('src'));
-            // location.href = '/admin';
+             location.href = '/admin/index';
         },
         error: function(XMLHttpRequest, textStatus, errorThrown) {
-            alert("上传失败，请检查网络后重试");
+            alert("上传失败，请稍后重试！");
         }
     });
 }
